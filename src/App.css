@@ -1,0 +1,25 @@
+.app {
+  min-height: 100vh;
+  padding: 2rem;
+  transition: 0.3s;
+}
+
+.light {
+  background-color: white;
+  color: black;
+}
+
+.dark {
+  background-color: #111;
+  color: white;
+}
+
+input {
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+button {
+  margin: 0.3rem;
+  padding: 0.5rem 1rem;
+}
