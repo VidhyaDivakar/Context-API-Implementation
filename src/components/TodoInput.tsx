@@ -6,30 +6,26 @@ const TodoInput = () => {
 
   const { addTodo } = useTodos();
 
-  const handleAdd = () => {
+ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (!text.trim()) return;
 
     addTodo(text);
-
     setText("");
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Add Todo"
+        placeholder="Enter todo..."
         value={text}
-        onChange={(e) =>
-          setText(e.target.value)
-        }
+        onChange={(e) => setText(e.target.value)}
       />
 
-      <button onClick={handleAdd}>
-        Add
-      </button>
-    </div>
+      <button type="submit">Add</button>
+    </form>
   );
 };
-
 export default TodoInput;

@@ -26,8 +26,7 @@ export const FilterProvider = ({
 
   return (
     <FilterContext.Provider
-      value={{ filter, setFilter }}
-    >
+      value={{ filter, setFilter }}>
       {children}
     </FilterContext.Provider>
   );

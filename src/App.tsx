@@ -1,8 +1,8 @@
-import "./styles/app.css";
+import "./App.css";
 
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
-import FilterButtons from "./components/FilterButtons";
+import FilterButtons from "./context/FilterButtons";
 import ThemeToggleButton from "./components/ThemeToggleButton";
 
 import { useTheme } from "./context/ThemeContext";

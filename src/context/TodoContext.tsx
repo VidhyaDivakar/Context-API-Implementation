@@ -71,7 +71,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const addTodo = (text: string) => dispatch({ type: 'ADD', payload: text });
+  const addTodo = (text: string) =>  {console.log("ADD DISPATCH:", text);dispatch({ type: 'ADD', payload: text });};
   const toggleTodo = (id: string) => dispatch({ type: 'TOGGLE', payload: id });
   const deleteTodo = (id: string) => dispatch({ type: 'DELETE', payload: id });
   const editTodo = (id: string, text: string) =>
