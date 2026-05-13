@@ -16,7 +16,18 @@ type Action =
 //creating a global storage space (Context) for the Todo app. - “This is a shared place where todos and actions will live so any component can use them.”
 //createContext() - creates shared state container; <any> disables typesafety 
 //null is default value prior to pr`ovides is set
-const TodoContext = createContext<any>(null)
+//const TodoContext = createContext<any>(null)
+interface TodoContextType {
+  todos: Todo[];
+  addTodo: (text: string) => void;
+  toggleTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
+  editTodo: (id: string, text: string) => void;
+  clearCompleted: () => void;
+}
+
+const TodoContext =
+  createContext<TodoContextType | null>(null);
 // Whenever an action happens, a Reducer function decides how the state should change. It cannot be reassigned later
 // state -> current todos[]; action -> union type : add, or delete etc
 // "State" - Return type, this function must return a new state (todo array)
@@ -76,4 +87,14 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useTodos = () => useContext(TodoContext);
+export const useTodos = () => {
+  const context = useContext(TodoContext);
+
+  if (!context) {
+    throw new Error(
+      "useTodos must be used within TodoProvider"
+    );
+  }
+
+  return context;
+};
