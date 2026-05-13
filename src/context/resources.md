@@ -59,3 +59,22 @@ const reducer = (state, action) => {
 
 
 ---
+
+Explaining this code chunk"
+
+return state.map(todo =>// return a new state
+
+    todo.id === action.payload
+
+    ? { ...todo, completed: !todo.completed }
+
+    : todo
+
+    );
+
+| col1                       | col2                                                                                             | col3 |
+| -------------------------- | ------------------------------------------------------------------------------------------------ | ---- |
+| return                     | must return a new state.<br />Never modify `state` directly<br />Always return a new array     |      |
+| state.map(...)             | loops through each todo in the array.<br />will process each one and return a**new array** |      |
+| todo =>                    | Arrow function. current item in the loop                                                         |      |
+| todo.id === action.payload |                                                                                                  |      |

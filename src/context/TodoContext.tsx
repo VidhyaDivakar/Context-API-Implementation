@@ -1,5 +1,6 @@
 import { createContext, useReducer, useContext, useEffect } from 'react';
-import { Todo } from '../types';
+import type { Todo } from '../types/todoTypes';
+import type { ReactNode } from "react";
 
 type State = Todo [];
 
@@ -14,7 +15,7 @@ type Action =
 
 //creating a global storage space (Context) for the Todo app. - “This is a shared place where todos and actions will live so any component can use them.”
 //createContext() - creates shared state container; <any> disables typesafety 
-//null is default value prior to provides is set
+//null is default value prior to pr`ovides is set
 const TodoContext = createContext<any>(null)
 // Whenever an action happens, a Reducer function decides how the state should change. It cannot be reassigned later
 // state -> current todos[]; action -> union type : add, or delete etc
@@ -28,9 +29,51 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         { id: Date.now().toString(), text: action.payload, completed: false }
       ];
-        case 'TOGGLE':
-      return state.map(todo =>
+        case 'TOGGLE': //“User wants to toggle (mark/unmark) a todo”
+      return state.map(todo => // return a new state
         todo.id === action.payload
           ? { ...todo, completed: !todo.completed }
           : todo
       );
+         case 'DELETE':
+      return state.filter(todo => todo.id !== action.payload);
+
+       case 'EDIT':
+      return state.map(todo =>
+        todo.id === action.payload.id
+          ? { ...todo, text: action.payload.text }
+          : todo
+      );
+         case 'CLEAR_COMPLETED':
+      return state.filter(todo => !todo.completed);
+         default:
+      return state;
+  }
+};
+// TodoProvider is the state container
+export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
+  const initialState: State = JSON.parse(localStorage.getItem('todos') || '[]');
+
+  const [todos, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodo = (text: string) => dispatch({ type: 'ADD', payload: text });
+  const toggleTodo = (id: string) => dispatch({ type: 'TOGGLE', payload: id });
+  const deleteTodo = (id: string) => dispatch({ type: 'DELETE', payload: id });
+  const editTodo = (id: string, text: string) =>
+    dispatch({ type: 'EDIT', payload: { id, text } });
+  const clearCompleted = () => dispatch({ type: 'CLEAR_COMPLETED' });
+
+  return (
+    <TodoContext.Provider
+      value={{ todos, addTodo, toggleTodo, deleteTodo, editTodo, clearCompleted }}
+    >
+      {children}
+    </TodoContext.Provider>
+  );
+};
+
+export const useTodos = () => useContext(TodoContext);
